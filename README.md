@@ -9,4 +9,3 @@ Kachabazar values customer satisfaction and ensures timely delivery, free of cos
 In addition to these, Kachabazar also facilitates a user-friendly return policy. You can return the package within the designated return period if you are not satisfied with the product. Customer support is always available for your queries, and they work swiftly to resolve any issues.
 
 Experience the convenience and quality of grocery shopping with Kachabazar, and let us be your one-stop-shop for all your needs. 
-# ecormmerce
