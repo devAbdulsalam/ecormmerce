@@ -28,7 +28,7 @@ const Login = ({ setIsOpenRegister }) => {
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				toast.success(data.message);
+				toast.success('login successful');
 				localStorage.setItem('user', JSON.stringify(data));
 				dispatch(login(data));
 				dispatch(isLoginAction(false));

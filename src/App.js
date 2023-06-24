@@ -9,6 +9,7 @@ import Footer from './components/footer/Footer';
 import MobileApp from './components/mobileApp/MobileApp';
 import Product from './components/product/Product';
 import Checkout from './components/checkout/Checkout';
+import CheckOutOrder from './components/checkout/CheckOutOrder';
 import Order from './components/order/Order';
 import FooterHeader from './components/footerHeader/FooterHeader';
 import SideBar from './components/sideBar/SideBar';
@@ -24,7 +25,7 @@ import { Fragment, useState } from 'react';
 import User from './components/user/User';
 import Dashboard from './components/dashboard/Dashboard';
 import MyOrders from './components/myOrders/MyOrders';
-// import Paypal from './components/paypal/Paypal';
+import Loading from './components/loading/Loading';
 import UpdateProfile from './components/updateProfile/UpdateProfile';
 import UpdatePassword from './components/updatePassword/UpdatePassword';
 import Offers from './pages/Offers';
@@ -39,6 +40,7 @@ function App() {
 		<Fragment>
 			<Header />
 			<Navigation />
+			<Loading />
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route path="/" element={<Home />} />
@@ -59,6 +61,7 @@ function App() {
 					<Route path="change-password/:token" element={<ChangePassword />} />
 					<Route element={<ProtectedRoutes />}>
 						<Route path="checkout" element={<Checkout />} />
+						<Route path="checkout/:id" element={<CheckOutOrder />} />
 						<Route path="offer" element={<Offers />} />
 						<Route path="user" element={<User />}>
 							<Route path="dashboard" element={<Dashboard />} />

@@ -1,12 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '../table/Table';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+// import { toast } from 'react-hot-toast';
+import axios from '../../axios';
 const Dashboard = () => {
-	// const cart = useSelector((state) => state.cart);
-	const order = [];
+	const { user } = useSelector((state) => state.user);
+	const [order, setOrder] = useState([]);
+	const [recentOrder, setRecentOrder] = useState([]);
+	const [pendingOrder, setPendingOrder] = useState([]);
+	const [processingOrder, setProcessingOrder] = useState([]);
+	const [completedOrder, setCompletedOrder] = useState([]);
+	const userId = user?.user?._id;
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
+	useEffect(() => {
+		axios.post('/order/get', userId).then(({ data }) => setOrder(data));
+	}, [userId]);
+	useEffect(() => {
+		setRecentOrder(order);
+		setPendingOrder(order?.filter(({ isPaid }) => !isPaid));
+		setProcessingOrder(
+			order?.filter(({ isDelivered }) => isDelivered === 'processing')
+		);
+		setCompletedOrder(
+			order?.filter(({ isDelivered }) => isDelivered === 'delivered')
+		);
+	}, [order]);
 	return (
 		<div className="overlow-hidden">
 			<h2 className="text-xl text-black font-semibold mb-5">Dashboard</h2>
@@ -35,7 +55,7 @@ const Dashboard = () => {
 								Total Order
 							</h5>
 							<p className="text-xl font-bold leading-none text-gray-800">
-								{order?.total}
+								{order?.length}
 							</p>
 						</div>
 					</div>
@@ -64,7 +84,7 @@ const Dashboard = () => {
 								Pending Order
 							</h5>
 							<p className="text-xl font-bold leading-none text-gray-800">
-								{order?.pending}
+								{pendingOrder.length}
 							</p>
 						</div>
 					</div>
@@ -94,7 +114,7 @@ const Dashboard = () => {
 								Processing Order
 							</h5>
 							<p className="text-xl font-bold leading-none text-gray-800">
-								{order?.process}
+								{processingOrder.length}
 							</p>
 						</div>
 					</div>
@@ -121,13 +141,13 @@ const Dashboard = () => {
 								Complete Order
 							</h5>
 							<p className="text-xl font-bold leading-none text-gray-800">
-								{order?.completed}
+								{completedOrder.length}
 							</p>
 						</div>
 					</div>
 				</div>
 			</div>
-			<Table title="Recent Order" data={order} />
+			<Table title="Recent Order" data={recentOrder} />
 		</div>
 	);
 };

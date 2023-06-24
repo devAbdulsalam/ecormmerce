@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from './store/store';
+import store from './store/store';
 import { getTotals } from './store/reducers/cartSlice';
 import { Toaster } from 'react-hot-toast';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
@@ -13,16 +13,16 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 store.dispatch(getTotals());
 root.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<Provider store={store}>
+	<Provider store={store}>
+		<React.StrictMode>
+			<BrowserRouter>
 				<Toaster />
 				<PayPalScriptProvider deferLoading={true}>
 					<App />
 				</PayPalScriptProvider>
-			</Provider>
-		</BrowserRouter>
-	</React.StrictMode>
+			</BrowserRouter>
+		</React.StrictMode>
+	</Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

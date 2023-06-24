@@ -1,12 +1,15 @@
 import React from 'react';
+import formatDateString from '../../hooks/useFormattedDate';
+import { useNavigate } from 'react-router-dom';
 
 const Table = ({ title, data, loading, error }) => {
+	let navigate = useNavigate();
 	var formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',
 	});
 	const handlePay = (item) => {
-		console.log(item);
+		navigate(`/checkout/${item._id}`);
 	};
 	return (
 		<div className="max-w-screen-2xl mx-auto ">
@@ -52,10 +55,6 @@ const Table = ({ title, data, loading, error }) => {
 										</tr>
 									</thead>
 									<tbody className="bg-white divide-y divide-gray-200">
-										{loading && (
-											<p className="text-blue-500 text-xl">Loading</p>
-										)}
-
 										{data &&
 											data.map((item, index) => (
 												<tr key={index}>
@@ -69,18 +68,11 @@ const Table = ({ title, data, loading, error }) => {
 														{formatter.format(item.totalPrice)}
 													</td>
 													<td className="px-6 py-1 whitespace-nowrap font-bold text-center font-DejaVu">
-														{item.createdAt}
+														{formatDateString(item?.createdAt)}
 													</td>
 													<td className="px-6 py-1 whitespace-nowrap text-right font-bold font-DejaVu k-grid">
-														{!item?.isPaid ? (
+														{item?.isPaid ? (
 															<button
-																onClick={handlePay}
-																className={`text-blue-500 m-1 rounded-md`}
-															>
-																{item.Pay}
-															</button>
-														) : (
-															<p
 																className={`${
 																	item.isDelivered === 'processing'
 																		? `text-yellow-500`
@@ -88,18 +80,30 @@ const Table = ({ title, data, loading, error }) => {
 																} m-1 rounded-md capitalize`}
 															>
 																{item.isDelivered}
-															</p>
+															</button>
+														) : (
+															<button
+																onClick={() => handlePay(item)}
+																className={`text-blue-500 m-1 rounded-md`}
+															>
+																Check out
+															</button>
 														)}
 													</td>
 												</tr>
 											))}
-										{error && (
-											<p className="text-red-500 text-xl text-center">
-												{error}
-											</p>
-										)}
 									</tbody>
 								</table>
+								{loading && (
+									<p className="text-blue-500 text-xl text-center w-full">
+										Loading
+									</p>
+								)}
+								{error && (
+									<p className="text-red-500 text-xl text-center w-full">
+										{error}
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
