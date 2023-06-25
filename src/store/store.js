@@ -5,15 +5,19 @@ import { searchReducer } from './reducers/searchSlice';
 import { shoppingCardReducer } from './reducers/shoppingCardSlice';
 import { sidebarReducer } from './reducers/sidebarSlice';
 import { authReducer } from './reducers/userSlice';
+import loadingSlice from './reducers/loadingSlice';
+import orderSlice from './reducers/orderSlice';
 import appApi from './../fetchers/appApi';
 
 const reducer = {
 	shoppingCard: shoppingCardReducer,
 	sidebar: sidebarReducer,
+	loading: loadingSlice,
 	cart: cartReducer,
 	search: searchReducer,
 	isOpen: isOpenReducer,
-	user: authReducer, // Add the authReducer
+	orders: orderSlice,
+	user: authReducer,
 	[appApi.reducerPath]: appApi.reducer,
 };
 

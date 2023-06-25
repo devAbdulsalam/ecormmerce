@@ -1,6 +1,10 @@
 import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-const Loading = ({ isOpen }) => {
+import { useSelector } from 'react-redux';
+import { Circles } from 'react-loader-spinner';
+
+const Loading = () => {
+	const isOpen = useSelector((state) => state.loading.value);
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
@@ -38,12 +42,19 @@ const Loading = ({ isOpen }) => {
 					>
 						<Dialog.Panel
 							className="
-								inline-block w-full max-w-lg
-								p-10 overflow-hidden text-left 
+								inline-block mx-auto overflow-hidden 
 								align-middle transition-all transform 
-								bg-white shadow-xl rounded-2xl "
+								bg-transparent text-center"
 						>
-							<div>Loading</div>
+							<Circles
+								height="80"
+								width="80"
+								color="#4fa94d"
+								ariaLabel="circles-loading"
+								wrapperStyle={{}}
+								wrapperClass=""
+								visible={true}
+							/>
 						</Dialog.Panel>
 					</Transition.Child>
 					<Transition.Child
@@ -53,26 +64,7 @@ const Loading = ({ isOpen }) => {
 						leave="ease-in duration-200"
 						leaveFrom="opacity-100"
 						leaveTo="opacity-0"
-					>
-						<div className="absolute right-5 top-5">
-							<button
-								type="button"
-								className="inline-flex justify-center px-2 py-2 text-base font-medium text-red-500 bg-white border border-transparent rounded-full hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-							>
-								<svg
-									stroke="currentColor"
-									fill="currentColor"
-									strokeWidth="0"
-									viewBox="0 0 512 512"
-									height="1em"
-									width="1em"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path d="M289.94 256l95-95A24 24 0 00351 127l-95 95-95-95a24 24 0 00-34 34l95 95-95 95a24 24 0 1034 34l95-95 95 95a24 24 0 0034-34z"></path>
-								</svg>
-							</button>
-						</div>
-					</Transition.Child>
+					></Transition.Child>
 				</div>
 			</Dialog>
 		</Transition>

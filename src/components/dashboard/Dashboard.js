@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../table/Table';
-import { useSelector } from 'react-redux';
-// import { toast } from 'react-hot-toast';
-import axios from '../../axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGetOrderQuery } from '../../fetchers/appApi';
+import { toast } from 'react-hot-toast';
+import { loadingAction } from '../../store/reducers/loadingSlice';
 const Dashboard = () => {
 	const { user } = useSelector((state) => state.user);
-	const [order, setOrder] = useState([]);
 	const [recentOrder, setRecentOrder] = useState([]);
 	const [pendingOrder, setPendingOrder] = useState([]);
 	const [processingOrder, setProcessingOrder] = useState([]);
 	const [completedOrder, setCompletedOrder] = useState([]);
+	const dispatch = useDispatch();
+	const order = useSelector((state) => state.orders);
 	const userId = user?.user?._id;
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
-	useEffect(() => {
-		axios.post('/order/get', userId).then(({ data }) => setOrder(data));
-	}, [userId]);
+	const { data, isError, isLoading, error } = useGetOrderQuery({
+		userId,
+	});
+	if (isLoading) {
+		dispatch(loadingAction(true));
+	}
+	if (isError) {
+		toast.error(error.error);
+		dispatch(loadingAction(false));
+	}
+	if (data) {
+		dispatch(loadingAction(false));
+	}
 	useEffect(() => {
 		setRecentOrder(order);
 		setPendingOrder(order?.filter(({ isPaid }) => !isPaid));

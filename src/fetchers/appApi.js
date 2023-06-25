@@ -1,6 +1,5 @@
-import axios from 'axios';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-// create the api
+
 export const appApi = createApi({
 	reducerPath: 'appApi',
 	baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
@@ -21,12 +20,7 @@ export const appApi = createApi({
 			}),
 		}),
 		getPaymentOption: builder.query({
-			queryFn: async () => {
-				const response = await axios.get(
-					'http://localhost:8080/payment/get-payment-option'
-				);
-				return response.data;
-			},
+			query: (id) => `/payment/get-payment-option`,
 		}),
 
 		// creating product
@@ -92,15 +86,19 @@ export const appApi = createApi({
 		}),
 		// get orders
 		getOrder: builder.query({
-			query: () => '/order/get',
+			query: (userId) => ({
+				url: '/order/get',
+				method: 'POST',
+				body: userId,
+			}),
 		}),
 		getSingleOrder: builder.query({
-			query: (id) => `/order/${id}`
+			query: (id) => `/order/${id}`,
 		}),
 		// create order
 		createOrder: builder.mutation({
 			query: (body) => ({
-				url: '/order/create',
+				url: '/order/get',
 				method: 'POST',
 				body,
 			}),
@@ -137,7 +135,6 @@ export const {
 	useGetPaymentOptionQuery,
 	useGetOrderQuery,
 	useGetSingleOrderQuery,
-	useGetOrdersMutation,
 	useCreateOrderMutation,
 	useDeleteOrderMutation,
 	useUpdateOrderMutation,

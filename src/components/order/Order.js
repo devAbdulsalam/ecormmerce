@@ -1,19 +1,33 @@
 import moment from 'moment';
-import React, { useEffect, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/icon/logo-color.svg';
 import ReactToPdf from 'react-to-pdf';
 import ReactToPrint from 'react-to-print';
+import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 function Order() {
 	const printRef = useRef();
+	let navigate = useNavigate();
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
 
 	const { id } = useParams();
-	const data = JSON.parse(localStorage.getItem(id));
-	// console.log(data);
+	let [data, setData] = useState('');
+	const orders = useSelector((state) => state.orders);
+	useEffect(() => {
+		const singleOrder = orders.find((order) => order._id === id);
+		if (singleOrder) {
+			return setData(singleOrder);
+		} else {
+			toast.error('Invalid order');
+			setTimeout(() => {
+				navigate(-1);
+			}, 3000);
+		}
+	}, [id, orders, navigate]);
 
 	var formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
@@ -29,7 +43,9 @@ function Order() {
 						<span className="font-bold text-emerald-600">
 							{data.firstName} {data.lastName},
 						</span>{' '}
-						Your order have been received !
+						{data.isDelivered === 'delivered'
+							? 'Your order have been delivered !'
+							: 'Your order is been proccess !'}
 					</label>
 				</div>
 				<div className="bg-white rounded-lg shadow-sm" ref={printRef}>
@@ -114,7 +130,9 @@ function Order() {
 										</Link>
 									</h2>
 									<p className="text-sm text-gray-500">
-										Kazım Karabekir, No:5 Ümraniye, <br /> İstanbul 34000{' '}
+										{data.address} {data.city}, <br />{' '}
+										<span>{data.country} </span>
+										{data.zipCode}
 									</p>
 								</div>
 							</div>
@@ -125,7 +143,7 @@ function Order() {
 									</span>
 									<span className="text-sm text-gray-500 block">
 										<span>
-											{moment(data.createdDate).format('MMMM DD, YYYY')}
+											{moment(data?.createdDate).format('MMMM DD, YYYY')}
 										</span>
 									</span>
 								</div>
@@ -134,7 +152,7 @@ function Order() {
 										Invoice No.
 									</span>
 									<span className="text-sm text-gray-500 block">
-										#{data.invoce}
+										#{data?._id}
 									</span>
 								</div>
 								<div className="flex flex-col lg:text-right text-left">
@@ -142,11 +160,11 @@ function Order() {
 										Invoice To.
 									</span>
 									<span className="text-sm text-gray-500 block">
-										{data.firstName} {data.lastName}
+										{data.firstName} {data?.lastName}
 										<br />
-										{data.streetAddress}
+										{data?.address}
 										<br />
-										{data.city}, {data.country}, {data.zipPostal}
+										{data?.city}, {data?.country}, {data?.zipCode}
 									</span>
 								</div>
 							</div>
@@ -190,7 +208,7 @@ function Order() {
 											</tr>
 										</thead>
 										<tbody className="bg-white divide-y divide-gray-100 text-serif text-sm">
-											{data.cart.cartItems.map((items, index) => (
+											{data?.cart?.map((items, index) => (
 												<tr key={index}>
 													<th className="px-6 py-1 whitespace-nowrap font-normal text-gray-500 text-left">
 														{index + 1}
@@ -229,9 +247,7 @@ function Order() {
 										Shipping Cost
 									</span>
 									<span className="text-sm text-gray-500 font-semibold block">
-										{data.shippingOption === 'FedEx'
-											? formatter.format(60)
-											: formatter.format(20)}
+										${formatter.format(data.shippingPrice)}
 									</span>
 								</div>
 								<div className="mb-3 md:mb-0 lg:mb-0 flex flex-col sm:flex-wrap">
@@ -247,7 +263,7 @@ function Order() {
 										Total Amount
 									</span>
 									<span className="text-2xl  font-bold text-red-500 block">
-										{formatter.format(data.cart.cartTotalAmount)}
+										{formatter.format(data.totalPrice)}
 									</span>
 								</div>
 							</div>

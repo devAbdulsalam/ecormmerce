@@ -8,9 +8,6 @@ const Table = ({ title, data, loading, error }) => {
 		style: 'currency',
 		currency: 'USD',
 	});
-	const handlePay = (item) => {
-		navigate(`/checkout/${item._id}`);
-	};
 	return (
 		<div className="max-w-screen-2xl mx-auto ">
 			<div className="rounded-md ">
@@ -73,6 +70,7 @@ const Table = ({ title, data, loading, error }) => {
 													<td className="px-6 py-1 whitespace-nowrap text-right font-bold font-DejaVu k-grid">
 														{item?.isPaid ? (
 															<button
+																onClick={() => navigate(`/order/${item._id}`)}
 																className={`${
 																	item.isDelivered === 'processing'
 																		? `text-yellow-500`
@@ -83,7 +81,9 @@ const Table = ({ title, data, loading, error }) => {
 															</button>
 														) : (
 															<button
-																onClick={() => handlePay(item)}
+																onClick={() =>
+																	navigate(`/checkout/${item._id}`)
+																}
 																className={`text-blue-500 m-1 rounded-md`}
 															>
 																Check out
