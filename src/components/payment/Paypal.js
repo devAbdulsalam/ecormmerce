@@ -32,15 +32,15 @@ const Paypal = ({ isOpen, order, setIsPayment }) => {
 	function createOrder(data, actions) {
 		return actions.order
 			.create({
-				"purchase_units": "[
+				purchase_units: [
 					{
 						reference_id: 'default',
 						amount: {
-							value: order.totalAmount,
+							value: '10.00',
 							currency_code: 'USD',
 						},
 					},
-				]",
+				],
 			})
 			.then((orderId) => {
 				return orderId;
