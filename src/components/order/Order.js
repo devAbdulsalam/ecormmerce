@@ -247,7 +247,7 @@ function Order() {
 										Shipping Cost
 									</span>
 									<span className="text-sm text-gray-500 font-semibold block">
-										${formatter.format(data.shippingPrice)}
+										{formatter.format(data.shippingPrice)}
 									</span>
 								</div>
 								<div className="mb-3 md:mb-0 lg:mb-0 flex flex-col sm:flex-wrap">

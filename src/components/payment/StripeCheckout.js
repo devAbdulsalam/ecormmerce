@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import axios from 'axios';
+import axios from '../../axios';
 import { toast } from 'react-hot-toast';
 // import { useSelector } from 'react-redux';
 
@@ -48,13 +48,10 @@ export const StripeCheckout = ({ order }) => {
 			});
 
 			if (paymentIntent) {
-				const res = await axios.post(
-					`${process.env.REACT_APP_BASE_API_URL}/order/create`,
-					{
-						...order,
-						paymentMethod: 'stripe',
-					}
-				);
+				const res = await axios.post(`/order/create`, {
+					...order,
+					paymentMethod: 'stripe',
+				});
 				console.log(res);
 				toast.success(`Payment ${paymentIntent.status}`);
 			}
@@ -66,7 +63,7 @@ export const StripeCheckout = ({ order }) => {
 
 	return (
 		<form onSubmit={handleSubmit} className="mt-1 h-fit">
-			<CardElement id="card-element" />
+			<CardElement id="card-element" className="my-1" />
 			<button
 				type="submit"
 				disabled={!stripe || !elements}
@@ -74,7 +71,6 @@ export const StripeCheckout = ({ order }) => {
 			>
 				Pay with Stripe
 			</button>
-			{/* Show error message to your customers */}
 			{errorMessage && <div>{errorMessage}</div>}
 		</form>
 	);

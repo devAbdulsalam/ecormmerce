@@ -8,13 +8,15 @@ import {
 } from '../../store/reducers/cartSlice';
 
 import { useSelector, useDispatch } from 'react-redux';
-function OrderSummary() {
+function OrderSummary({ shippingPrice }) {
 	const cart = useSelector((state) => state.cart);
 	const { cartTotalAmount } = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(getTotals());
 	}, [cart, dispatch]);
+	const totalPrice = Number(shippingPrice) + Number(cartTotalAmount);
+
 	return (
 		<div className="md:w-full lg:w-2/5 lg:ml-10 xl:ml-14 md:ml-6 flex flex-col h-full md:sticky lg:sticky top-28 md:order-2 lg:order-2">
 			<div className="border p-5 lg:px-8 lg:py-8 rounded-lg bg-white order-1 sm:order-2">
@@ -164,7 +166,7 @@ function OrderSummary() {
 				<div className="flex items-center py-2 text-sm w-full font-semibold text-gray-500 last:border-b-0 last:text-base last:pb-0   ">
 					Shipping Cost
 					<span className="ml-auto flex-shrink-0 text-gray-800 font-bold">
-						$ 0.00
+						$ {shippingPrice}
 					</span>
 				</div>
 				<div className="flex items-center py-2 text-sm w-full font-semibold text-gray-500 last:border-b-0 last:text-base last:pb-0">
@@ -176,7 +178,7 @@ function OrderSummary() {
 				<div className="border-t mt-4 text-black">
 					<div className="flex items-center font-bold justify-between pt-5 text-sm uppercase">
 						Total Cost
-						<span className="font-extrabold text-lg">$ {cartTotalAmount}</span>
+						<span className="font-extrabold text-lg">$ {totalPrice}</span>
 					</div>
 				</div>
 			</div>

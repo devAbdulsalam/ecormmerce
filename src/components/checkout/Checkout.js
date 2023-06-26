@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 import OrderSummary from '../orderSummary/OrderSummary';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import randomId from 'random-id';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from '../../axios';
 import { toast } from 'react-hot-toast';
-import Payment from '../payment/Payment';
+import { loadingAction } from '../../store/reducers/loadingSlice';
 const SignupSchema = Yup.object().shape({
 	firstName: Yup.string().required('First Name is required!'),
 	lastName: Yup.string().required('Last name is required!'),
@@ -23,15 +22,12 @@ const SignupSchema = Yup.object().shape({
 	paymentMethod: Yup.string().required('Payment Method is required'),
 });
 function Checkout() {
-	let [isPayment, setIsPayment] = useState(false);
-	let [order, setOrder] = useState('');
-	let [isloading, setIsLoading] = useState(false);
+	const dispatch = useDispatch();
 	let [isError, setIsError] = useState(false);
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
 	let navigate = useNavigate();
-	var Id = randomId(30, 'aA0');
 	const { cartTotalAmount } = useSelector((state) => state.cart);
 	const { ...item } = useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.user);
@@ -49,49 +45,45 @@ function Checkout() {
 		const data = {
 			createdDate: new Date(),
 			updatedDate: new Date(),
-			invoice: Id,
 			shippingPrice,
 			userId: user?.user?._id,
-			id: Id,
 			cart: item.cartItems,
 			...value,
 			cartTotalAmount,
-			totalPrice: Number(cartTotalAmount + shippingPrice),
+			totalPrice: Number(shippingPrice) + Number(cartTotalAmount),
 		};
-		if (data.paymentMethod === 'COD') {
-			axios
-				.post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, data)
-				.then((res) => res.data)
-				.then((data) => {
-					setIsLoading(false);
-					toast.success(data.message);
-					navigate(`./order/${Id}`);
-				})
-				.catch((error) => {
-					toast.error(
-						error
-							? error?.response?.data?.error ||
-									error?.response?.data?.message ||
-									error?.response?.data?.error.message ||
-									error?.message
-							: error?.message
-					);
-					setIsError(
-						error
-							? error?.response?.data?.error ||
-									error?.response?.data?.message ||
-									error?.response?.data?.error.message ||
-									error?.message
-							: error?.message
-					);
-					setTimeout(() => {
-						setIsError(false);
-					}, 2000);
-				});
-		} else {
-			setIsPayment(true);
-			setOrder(data);
-		}
+		dispatch(loadingAction(true));
+		axios
+			.post(`/order/create`, data)
+			.then((res) => res.data)
+			.then((data) => {
+				dispatch(loadingAction(false));
+				toast.success(data.message);
+				localStorage.removeItem('cartItems');
+				navigate(`./${data?.order._id}`);
+			})
+			.catch((error) => {
+				dispatch(loadingAction(false));
+				toast.error(
+					error
+						? error?.response?.data?.error ||
+								error?.response?.data?.message ||
+								error?.response?.data?.error.message ||
+								error?.message
+						: error?.message
+				);
+				setIsError(
+					error
+						? error?.response?.data?.error ||
+								error?.response?.data?.message ||
+								error?.response?.data?.error.message ||
+								error?.message
+						: error?.message
+				);
+				setTimeout(() => {
+					setIsError(false);
+				}, 2000);
+			});
 	};
 
 	return (
@@ -567,7 +559,6 @@ function Checkout() {
 												<div className="col-span-6 sm:col-span-3">
 													<button
 														type="submit"
-														disabled={isloading}
 														className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
 													>
 														Confirm Order{' '}
@@ -600,10 +591,9 @@ function Checkout() {
 							</Formik>
 						</div>
 					</div>
-					<OrderSummary />
+					<OrderSummary shippingPrice={shippingPrice} />
 				</div>
 			</div>
-			<Payment isOpen={isPayment} setIsPayment={setIsPayment} order={order} />
 		</div>
 	);
 }

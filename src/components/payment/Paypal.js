@@ -1,39 +1,53 @@
 import React, { Fragment, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../axios';
+
 import { toast } from 'react-hot-toast';
 // paypla
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
-// stripe
-import { Elements } from '@stripe/react-stripe-js';
-import { StripeCheckout } from './StripeCheckout';
-import { loadStripe } from '@stripe/stripe-js';
 
-const Payment = ({ isOpen, order, setIsPayment }) => {
+import axios from 'axios';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+
+const Paypal = ({ isOpen, order, setIsPayment }) => {
 	let navigate = useNavigate();
 	// paypal
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 	useEffect(() => {
-		if (order) {
-			const loadPaypalScript = async () => {
-				const { data: clientId } = await axios.get('/api/keys/paypal');
-				paypalDispatch({
-					type: 'resetOptions',
-					value: {
-						'client-id': clientId,
-						currency: 'USD',
-					},
-				});
-				paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-			};
-			loadPaypalScript();
-		}
-	}, [paypalDispatch, order]);
+		paypalDispatch({
+			type: 'resetOptions',
+			value: {
+				'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+				currency: 'USD',
+			},
+		});
+	}, [paypalDispatch]);
+	console.log(order?.phone);
 
 	function createOrder(data, actions) {
+		console.log(data);
 		return actions.order
 			.create({
+				application_context: {
+					shipping_preference: 'NO_SHIPPING',
+				},
+				payer: {
+					email_address: order?.email,
+					phone: {
+						phone_number: order?.phone,
+					},
+					shipping: {
+						name: {
+							firstName: data?.fullName,
+							lastName: data?.lastName,
+						},
+						address: {
+							address_line_1: order.address,
+							admin_area_1: data.address,
+							postal_code: data?.postal_code,
+							country_code: 'US',
+						},
+					},
+				},
 				purchase_units: [
 					{
 						amount: {
@@ -50,15 +64,15 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 	function onApprove(data, actions) {
 		return actions.order.capture().then((details) => {
 			try {
-				toast.success(`Paypal transaction completed`);
-				console.log(details);
-				console.log(order);
+				const name = details.payer.name.given_name;
+				alert(`Transaction completed by ${name}`);
 				axios
-					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, order)
+					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, data)
 					.then((res) => res.data)
 					.then((data) => {
 						toast.success(data.message);
-						navigate(`/order/${order._id}`);
+						localStorage.setItem('order', JSON.stringify(data));
+						navigate(`/order/`);
 					})
 					.catch((error) => {
 						toast.error(
@@ -78,10 +92,6 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 	function onError(error) {
 		return console.log('an error occur', error);
 	}
-	// const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
-	const stripePromise = loadStripe(
-		'pk_test_51NBaTpCCrWcBmYv2xmC9Db65X1M6cyftLwspR6b8z3Xkg5Q0XVX07ZJ2d7286rqwrZrqJ7ZtbnF7Eb3xVVp0YciQ00AcgfSwvG'
-	);
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
@@ -127,7 +137,7 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 							<div className="overflow-hidden bg-white mx-auto">
 								<div className="text-center mb-6">
 									<h2 className="font-semibold text-black text-2xl text-center py-2 px-5 capitalize">
-										Select a Payment method
+										Pay with Paypal
 									</h2>
 								</div>
 								<>
@@ -148,12 +158,6 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 										/>
 									)}{' '}
 								</>
-								{/* stripe */}
-								<div className="h-fit">
-									<Elements stripe={stripePromise}>
-										<StripeCheckout order={order} />
-									</Elements>
-								</div>
 							</div>
 						</Dialog.Panel>
 					</Transition.Child>
@@ -193,4 +197,4 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 	);
 };
 
-export default Payment;
+export default Paypal;

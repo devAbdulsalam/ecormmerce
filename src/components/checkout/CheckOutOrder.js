@@ -1,13 +1,14 @@
 import { Field, Form, Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import OrderSummary from '../orderSummary/OrderSummary';
+import CheckOutSummary from '../orderSummary/CheckOutSummary';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import Payment from '../payment/Payment';
-import { useGetPaymentOptionQuery } from '../../fetchers/appApi';
+// import { useGetPaymentOptionQuery } from '../../fetchers/appApi';
 import { loadingAction } from '../../store/reducers/loadingSlice';
+import { useGetOrderQuery } from '../../fetchers/appApi';
 const SignupSchema = Yup.object().shape({
 	firstName: Yup.string().required('First Name is required!'),
 	lastName: Yup.string().required('Last name is required!'),
@@ -37,27 +38,30 @@ function CheckOutOrder() {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
+	const { data, isSuccess, isError, isLoading, error } = useGetOrderQuery({
+		userId,
+	});
 	useEffect(() => {
-		const singleOrder = orders.find((order) => order._id === id);
-		if (singleOrder) {
-			console.log(singleOrder);
-			return setOrder(singleOrder);
-		} else {
-			toast.error('Invalid order');
-			setTimeout(() => {
-				navigate(-1);
-			}, 3000);
+		if (orders) {
+			const singleOrder = orders.find((order) => order._id === id);
+			if (singleOrder) {
+				console.log(singleOrder);
+				return setOrder(singleOrder);
+			}
 		}
 	}, [id, orders, navigate]);
-	const { data, isSuccess, isError, isLoading, error } =
-		useGetPaymentOptionQuery();
+	// const { data, isSuccess, isError, isLoading, error } =
+	// 	useGetPaymentOptionQuery();
 	if (isLoading) {
 		dispatch(loadingAction(true));
 	}
 	if (isError) {
 		console.log(error.error);
-		toast.error(error.error);
+		toast.error(error.error.message || error.error);
 		dispatch(loadingAction(false));
+	}
+	if (order) {
+		console.log(order);
 	}
 	if (isSuccess) {
 		console.log(data);
@@ -600,7 +604,7 @@ function CheckOutOrder() {
 								</Formik>
 							</div>
 						</div>
-						<OrderSummary />
+						<CheckOutSummary order={order} />
 					</div>
 				</div>
 				<Payment isOpen={isPayment} setIsPayment={setIsPayment} order={order} />
