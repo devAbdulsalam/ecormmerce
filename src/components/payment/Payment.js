@@ -1,87 +1,25 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../../axios';
-import { toast } from 'react-hot-toast';
-// paypla
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 // stripe
 import { Elements } from '@stripe/react-stripe-js';
 import { StripeCheckout } from './StripeCheckout';
 import { loadStripe } from '@stripe/stripe-js';
 
-const Payment = ({ isOpen, order, setIsPayment }) => {
-	let navigate = useNavigate();
+const Payment = ({ isOpen, order, setIsPayment, setIsPaypal }) => {
 	// paypal
-	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-	useEffect(() => {
-		if (order) {
-			const loadPaypalScript = async () => {
-				const { data: clientId } = await axios.get('/api/keys/paypal');
-				paypalDispatch({
-					type: 'resetOptions',
-					value: {
-						'client-id': clientId,
-						currency: 'USD',
-					},
-				});
-				paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-			};
-			loadPaypalScript();
-		}
-	}, [paypalDispatch, order]);
-
-	function createOrder(data, actions) {
-		return actions.order
-			.create({
-				purchase_units: [
-					{
-						amount: {
-							value: order.totalAmount,
-						},
-					},
-				],
-			})
-			.then((orderId) => {
-				return orderId;
-			});
-	}
-
-	function onApprove(data, actions) {
-		return actions.order.capture().then((details) => {
-			try {
-				toast.success(`Paypal transaction completed`);
-				console.log(details);
-				console.log(order);
-				axios
-					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, order)
-					.then((res) => res.data)
-					.then((data) => {
-						toast.success(data.message);
-						navigate(`/order/${order._id}`);
-					})
-					.catch((error) => {
-						toast.error(
-							error
-								? error?.response?.data?.error ||
-										error?.response?.data?.message ||
-										error?.response?.data?.error.message ||
-										error?.message
-								: error?.message
-						);
-					});
-			} catch (error) {
-				console.log(error);
-			}
-		});
-	}
-	function onError(error) {
-		return console.log('an error occur', error);
-	}
 	// const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
 	const stripePromise = loadStripe(
 		'pk_test_51NBaTpCCrWcBmYv2xmC9Db65X1M6cyftLwspR6b8z3Xkg5Q0XVX07ZJ2d7286rqwrZrqJ7ZtbnF7Eb3xVVp0YciQ00AcgfSwvG'
 	);
+	const handlePaypal = () => {
+		setIsPaypal(true);
+		setIsPayment(false);
+	};
+	const handelStripe = () => {
+		// setIsPaypal(true);
+		console.log('pay with stripe');
+		setIsPayment(false);
+	};
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
@@ -130,24 +68,22 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 										Select a Payment method
 									</h2>
 								</div>
-								<>
-									{isPending ? (
-										<button
-											type="button"
-											className="hover:border-gray-600 border border-gray-500 transition-all rounded py-3 text-center text-sm font-medium flex justify-center w-full"
-											disabled
-										>
-											Loading Paypal...
-										</button>
-									) : (
-										<PayPalButtons
-											style={{ layout: 'horizontal' }}
-											createOrder={createOrder}
-											onApprove={onApprove}
-											onError={onError}
-										/>
-									)}{' '}
-								</>
+								<button
+									type="button"
+									onClick={handlePaypal}
+									className="hover:border-gray-600 border border-gray-500 transition-all rounded py-3 text-center text-sm font-medium flex justify-center w-full"
+									disabled
+								>
+									Pay with Paypal
+								</button>
+								<button
+									type="button"
+									onClick={handelStripe}
+									className="hover:border-gray-600 border border-gray-500 transition-all rounded py-3 text-center text-sm font-medium flex justify-center w-full"
+									disabled
+								>
+									Pay with Bank
+								</button>
 								{/* stripe */}
 								<div className="h-fit">
 									<Elements stripe={stripePromise}>

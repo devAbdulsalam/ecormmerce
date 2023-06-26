@@ -9,19 +9,18 @@ export const StripeCheckout = ({ order }) => {
 	const elements = useElements();
 	const [errorMessage, setErrorMessage] = useState(null);
 	// const { user } = useSelector((state) => state.user);
-	// const appearance = {
-	// 	theme: 'stripe',
-
-	// 	variables: {
-	// 		colorPrimary: '#0570de',
-	// 		colorBackground: '#ffffff',
-	// 		colorText: '#30313d',
-	// 		colorDanger: '#df1b41',
-	// 		fontFamily: 'Ideal Sans, system-ui, sans-serif',
-	// 		spacingUnit: '2px',
-	// 		borderRadius: '4px',
-	// 	},
-	// };
+	const appearance = {
+		theme: 'stripe',
+		variables: {
+			colorPrimary: '#0570de',
+			colorBackground: '#ffffff',
+			colorText: '#30313d',
+			colorDanger: '#df1b41',
+			fontFamily: 'Ideal Sans, system-ui, sans-serif',
+			spacingUnit: '2px',
+			borderRadius: '4px',
+		},
+	};
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
@@ -43,7 +42,7 @@ export const StripeCheckout = ({ order }) => {
 
 			const { paymentIntent } = await stripe.confirmCardPayment(client_secret, {
 				payment_method: {
-					card: elements.getElement(CardElement),
+					card: elements.getElement({ CardElement, appearance }),
 				},
 			});
 

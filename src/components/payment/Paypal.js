@@ -13,41 +13,25 @@ const Paypal = ({ isOpen, order, setIsPayment }) => {
 	// paypal
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 	useEffect(() => {
-		paypalDispatch({
-			type: 'resetOptions',
-			value: {
-				'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
-				currency: 'USD',
-			},
-		});
-	}, [paypalDispatch]);
-	console.log(order?.phone);
+		if (order) {
+			const loadPaypalScript = async () => {
+				const { data: clientId } = await axios.get('/api/keys/paypal');
+				paypalDispatch({
+					type: 'resetOptions',
+					value: {
+						'client-id': clientId,
+						currency: 'USD',
+					},
+				});
+				paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+			};
+			loadPaypalScript();
+		}
+	}, [paypalDispatch, order]);
 
 	function createOrder(data, actions) {
-		console.log(data);
 		return actions.order
 			.create({
-				application_context: {
-					shipping_preference: 'NO_SHIPPING',
-				},
-				payer: {
-					email_address: order?.email,
-					phone: {
-						phone_number: order?.phone,
-					},
-					shipping: {
-						name: {
-							firstName: data?.fullName,
-							lastName: data?.lastName,
-						},
-						address: {
-							address_line_1: order.address,
-							admin_area_1: data.address,
-							postal_code: data?.postal_code,
-							country_code: 'US',
-						},
-					},
-				},
 				purchase_units: [
 					{
 						amount: {
@@ -64,15 +48,15 @@ const Paypal = ({ isOpen, order, setIsPayment }) => {
 	function onApprove(data, actions) {
 		return actions.order.capture().then((details) => {
 			try {
-				const name = details.payer.name.given_name;
-				alert(`Transaction completed by ${name}`);
+				toast.success(`Paypal transaction completed`);
+				console.log(details);
+				console.log(order);
 				axios
-					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, data)
+					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, order)
 					.then((res) => res.data)
 					.then((data) => {
 						toast.success(data.message);
-						localStorage.setItem('order', JSON.stringify(data));
-						navigate(`/order/`);
+						navigate(`/order/${order._id}`);
 					})
 					.catch((error) => {
 						toast.error(
