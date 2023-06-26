@@ -44,7 +44,7 @@ function CheckOutOrder() {
 		dispatch(loadingAction(true));
 	}
 	if (isSuccess) {
-		dispatch(loadingAction(true));
+		dispatch(loadingAction(false));
 	}
 	if (isError) {
 		console.log(error.error);
