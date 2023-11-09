@@ -21,7 +21,7 @@ import ForgetPassword from './components/forgetPassword/ForgetPassword';
 import ResetPassword from './components/forgetPassword/ResetPassword';
 import ChangePassword from './components/forgetPassword/ChangePassword';
 import VerifyOtp from './components/verifyOtp/VerifyOtp';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import User from './components/user/User';
 import Dashboard from './components/dashboard/Dashboard';
 import MyOrders from './components/myOrders/MyOrders';
@@ -32,10 +32,20 @@ import Offers from './pages/Offers';
 import Layout from './Layout';
 import ProtectedRoutes from './context/ProtectedRoutes';
 import { useUserFromLocalStorage } from './store/reducers/userSlice';
-
+import axios from './axios';
 function App() {
 	let [isOpenRegister, setIsOpenRegister] = useState(false);
+	let [site, setSite] = useState('');
 	useUserFromLocalStorage();
+	useEffect(() => {
+		axios
+			.get('general')
+			.then((res) => {
+				setSite(res.data)
+				// console.log(res.data)
+			})
+			.catch((error) => console.log(error));
+	}, []);
 	return (
 		<Fragment>
 			<Header />
@@ -43,9 +53,9 @@ function App() {
 			<Loading />
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route path="/" element={<Home />} />
-					<Route path="about-us" element={<About />} />
-					<Route path="contact-us" element={<Contact />} />
+					<Route path="/" element={<Home site={site} />} />
+					<Route path="about-us" element={<About site={site} />} />
+					<Route path="contact-us" element={<Contact site={site} />} />
 					<Route path={'product/:productTitle'} element={<Product />} />
 					<Route path="search" element={<Search />} />
 					<Route path={'order/:id'} element={<Order />} />
@@ -87,7 +97,7 @@ function App() {
 			</div>
 			<div className="w-full">
 				<MobileApp />
-				<Footer />
+				<Footer site={site} />
 			</div>
 		</Fragment>
 	);

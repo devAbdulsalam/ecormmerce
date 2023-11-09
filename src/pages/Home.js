@@ -9,7 +9,7 @@ import LatestDiscountedProduct from "../components/latestDiscountedProduct/Lates
 import Cart from "../components/cart/Cart";
 import { Coupon } from "../fakeData/coupon";
 
-function Home() {
+function Home(site) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

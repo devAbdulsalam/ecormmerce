@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import contactUs from '../assets/img/contact-us.png';
 
-function Contact() {
+function Contact(site) {
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
@@ -44,7 +44,7 @@ function Contact() {
 									href="mailto:kachabazar@gmail.com"
 									className="text-emerald-500"
 								>
-									speedafhost@gmail.com{' '}
+									{site.adminEmail}{' '}
 								</a>
 								Interactively grow empowered for process-centric total linkage.
 							</p>
@@ -70,7 +70,7 @@ function Contact() {
 							<h5 className="text-xl mb-2 font-bold">Call Us</h5>
 							<p className="mb-0 text-base opacity-90 leading-7">
 								<a href="mailto:029-00124667" className="text-emerald-500">
-									08088886823{' '}
+									{site.phone}{' '}
 								</a>
 								Distinctively disseminate focused solutions clicks-and-mortar
 								ministate.
@@ -104,7 +104,7 @@ function Contact() {
 								<a href="mailto:" className="text-emerald-500">
 									Address:
 								</a>{' '}
-								NO 2 Adegoke Terminal, Ibadan Oyo Nigeria
+								{site.address}
 							</p>
 						</div>
 					</div>

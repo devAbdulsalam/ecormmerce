@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
 import { login } from '../../store/reducers/userSlice';
+import { loadingAction } from '../../store/reducers/loadingSlice';
 // import { Link } from 'react-router-dom';
 
 const Login = ({ setIsOpenRegister }) => {
@@ -23,34 +24,46 @@ const Login = ({ setIsOpenRegister }) => {
 	const handleSubmit = async (values) => {
 		// console.log(isValidating);
 		setIsLoading(true);
+		dispatch(loadingAction(true));
 		axios
 			.post(`${process.env.REACT_APP_BASE_API_URL}/user/login`, values)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
+				dispatch(loadingAction(false));
 				toast.success('login successful');
 				localStorage.setItem('user', JSON.stringify(data));
 				dispatch(login(data));
 				dispatch(isLoginAction(false));
 			})
 			.catch((error) => {
+				console.log(error);
 				toast.error(
 					error
 						? error?.response?.data?.error ||
+								error?.response?.data?.error?.message ||
 								error?.response?.data?.message ||
-								error?.response?.data?.error.message ||
 								error?.message
 						: error?.message
 				);
+				dispatch(loadingAction(false));
 				setIsLoading(false);
 			});
+	};
+	const handleClose = () => {
+		if (isLoading) {
+			console.log('is loading');
+			return {};
+		}
+		console.log('close modal');
+		dispatch(isLoginAction(false));
 	};
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
 				as="div"
 				className=" fixed inset-0 overflow-y-auto text-center z-30"
-				onClose={() => dispatch(isLoginAction(false))}
+				onClose={() => handleClose}
 			>
 				<div className="min-h-screen px-4">
 					<Transition.Child
@@ -136,7 +149,7 @@ const Login = ({ setIsOpenRegister }) => {
 															id="email"
 															name="email"
 															placeholder="Email"
-															autoComplete
+															autoComplete="true"
 															type="email"
 														/>
 													</div>
@@ -277,6 +290,7 @@ const Login = ({ setIsOpenRegister }) => {
 						leaveTo="opacity-0"
 					>
 						<div
+							disabled={isLoading}
 							onClick={() => dispatch(isLoginAction(false))}
 							className="absolute right-5 top-5"
 						>

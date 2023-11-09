@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 import { loadingAction } from '../../store/reducers/loadingSlice';
 const SignupSchema = Yup.object().shape({
 	firstName: Yup.string().required('First Name is required!'),
-	lastName: Yup.string().required('Last name is required!'),
+	lastName: Yup.string(),
 	email: Yup.string()
 		.email('Invalid email')
 		.required('Email address is required!'),
@@ -53,6 +53,7 @@ function Checkout() {
 			totalPrice: Number(shippingPrice) + Number(cartTotalAmount),
 		};
 		dispatch(loadingAction(true));
+		console.log(data)
 		axios
 			.post(`/order/create`, data)
 			.then((res) => res.data)

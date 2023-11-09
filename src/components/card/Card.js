@@ -89,12 +89,14 @@ function Card({ data }) {
                   margin: "0",
                   padding: "0",
                 }}
+                alt={'juj'}
               />
             </span>
             <img
               src={data.image}
               decoding="async"
               data-nimg="intrinsic"
+              alt={'juj'}
               className="object-cover transition duration-150 ease-linear transform group-hover:scale-105"
               style={{
                 inset: "0px",

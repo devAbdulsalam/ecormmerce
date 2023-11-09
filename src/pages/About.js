@@ -8,7 +8,7 @@ import women1 from "../assets/img/women-1.png";
 import women2 from "../assets/img/women-2.png";
 import women3 from "../assets/img/women-3.png";
 
-const About = () => {
+const About = (site) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -29,19 +29,10 @@ const About = () => {
 					<div className="grid grid-flow-row lg:grid-cols-2 gap-4 lg:gap-16 ">
 						<div>
 							<h3 className="text-xl lg:text-3xl mb-2  font-semibold">
-								Welcome to our KachaBazar
+								Welcome to {site.name}
 							</h3>
 							<div className="mt-3 text-base opacity-90 leading-7">
-								<p className="mb-4">
-									Holisticly seize parallel metrics and functional ROI.
-									Seamlessly revolutionize error-free internal or "organic"
-									sources before effective scenarios. Progressively incentivize
-									state of the art applications for efficient intellectual
-									capital. Credibly leverage existing distinctive mindshare
-									through cutting-edge schemas. Proactively procrastinate team
-									building paradigms coordinate client-centric total transparent
-									internal.
-								</p>
+								<p className="mb-4">{site.description}</p>
 
 								<p>
 									Dynamically embrace diverse customer service and installed
@@ -108,22 +99,7 @@ const About = () => {
 						</div>
 					</div>
 					<div className="mt-10 lg:mt-16 text-base opacity-90 leading-7">
-						<p className="mb-4">
-							Holisticly seize parallel metrics and functional ROI. Seamlessly
-							revolutionize error-free internal or "organic" sources before
-							effective scenarios. Progressively incentivize state of the art
-							applications for efficient intellectual capital. Credibly leverage
-							existing distinctive mindshare through cutting-edge schemas.
-							Proactively procrastinate team building paradigms coordinate
-							client-centric total transparent internal. Energistically
-							reconceptualize global leadership for high-quality networks.
-							Credibly restore an expanded array of systems rather than accurate
-							results. Collaboratively synergize backend bandwidth without 24/7
-							functionalities. Credibly utilize proactive ideas whereas
-							cross-media core competencies. Uniquely maximize professional best
-							practices through resource maximizing services. Conveniently
-							architect cross-unit web services for e-business imperatives.
-						</p>
+						<p className="mb-4">{site.description}</p>
 						<p>
 							Appropriately visualize market-driven data before one-to-one
 							scenarios. Collaboratively productize multifunctional ROI through
@@ -233,6 +209,7 @@ const About = () => {
 										}}
 									>
 										<img
+											alt="aboutus"
 											className="block rounded-lg"
 											style={{
 												display: 'bolck',
@@ -288,6 +265,7 @@ const About = () => {
 										}}
 									>
 										<img
+											alt="aboutus"
 											className="block rounded-lg"
 											style={{
 												display: 'bolck',
@@ -341,6 +319,7 @@ const About = () => {
 										}}
 									>
 										<img
+											alt="aboutus"
 											className="block rounded-lg"
 											style={{
 												display: 'bolck',
@@ -396,6 +375,7 @@ const About = () => {
 										}}
 									>
 										<img
+											alt="aboutus"
 											className="block rounded-lg"
 											style={{
 												display: 'bolck',
@@ -451,6 +431,7 @@ const About = () => {
 										}}
 									>
 										<img
+											alt="aboutus"
 											className="block rounded-lg"
 											style={{
 												display: 'bolck',
@@ -504,6 +485,7 @@ const About = () => {
 										}}
 									>
 										<img
+											alt="aboutus"
 											className="block rounded-lg"
 											style={{
 												display: 'bolck',
