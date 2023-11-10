@@ -52,6 +52,7 @@ function CheckOutOrder() {
 		dispatch(loadingAction(false));
 	}
 	const handleSubmit = (value) => {
+		console.log(value);
 		if (!cartTotalAmount > 50) {
 			return toast.error('Order Items must worth more than $100');
 		}

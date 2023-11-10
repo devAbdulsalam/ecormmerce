@@ -33,16 +33,17 @@ import Layout from './Layout';
 import ProtectedRoutes from './context/ProtectedRoutes';
 import { useUserFromLocalStorage } from './store/reducers/userSlice';
 import axios from './axios';
+import { getProducts } from './fakeData/Products';
 function App() {
 	let [isOpenRegister, setIsOpenRegister] = useState(false);
 	let [site, setSite] = useState('');
 	useUserFromLocalStorage();
 	useEffect(() => {
+		getProducts()
 		axios
 			.get('general')
 			.then((res) => {
 				setSite(res.data)
-				// console.log(res.data)
 			})
 			.catch((error) => console.log(error));
 	}, []);

@@ -9,7 +9,10 @@ function LatestDiscountedProduct() {
 		axios
 			.get('products')
 			.then((res) => {
-				setDiscountProducts(res.data);
+				const discount = res.data.filter(
+					(item) => item.discountType !== 'no discount'
+				);
+				setDiscountProducts(discount);
 				// console.log(res.data);
 			})
 			.catch((error) => {

@@ -26,7 +26,7 @@ const Login = ({ setIsOpenRegister }) => {
 		setIsLoading(true);
 		dispatch(loadingAction(true));
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/login`, values)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/users/login`, values)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);

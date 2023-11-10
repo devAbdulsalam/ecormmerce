@@ -15,7 +15,7 @@ function CheckOutSummary({ order }) {
 							>
 								<div className="relative flex rounded-full border border-gray-100 shadow-sm overflow-hidden flex-shrink-0 cursor-pointer mr-4">
 									<img
-										src={cartItem.image}
+										src={cartItem.image?.url}
 										width="40"
 										height="40"
 										alt="Blueberry"
@@ -26,7 +26,7 @@ function CheckOutSummary({ order }) {
 										className="truncate text-sm font-medium !no-underline !text-gray-700 text-heading line-clamp-1 "
 										to="/product/bluberry"
 									>
-										{cartItem.title}
+										{cartItem.name}
 									</Link>
 									<span className="text-xs text-gray-400 mb-1">
 										Item Price $ {cartItem.price}

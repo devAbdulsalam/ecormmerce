@@ -101,7 +101,11 @@ const SideBar = () => {
 														maxWidth: '100%',
 													}}
 												>
-													<img className="h-4 w-4" src={category.icon} />
+													<img
+														className="h-4 w-4"
+														src={category.icon}
+														alt={category.name}
+													/>
 												</span>
 												<div className="inline-flex items-center justify-between ml-3 text-sm font-medium w-full hover:text-emerald-600">
 													{category.name}

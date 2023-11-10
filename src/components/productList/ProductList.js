@@ -10,7 +10,7 @@ const ProductList = ({ data }) => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, data]);
   return (
     <div>
       <div className="flex justify-between my-3 bg-orange-100 border border-gray-100 rounded p-3">

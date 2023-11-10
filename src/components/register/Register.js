@@ -29,7 +29,7 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 	const handleSubmit = async (values) => {
 		setIsLoading(true);
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/signup`, values)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/users/signup`, values)
 			.then((res) => res.data)
 			.then((data) => {
 				toast.success('Sign up successfull');

@@ -342,7 +342,7 @@ function Footer({ site }) {
 					<div className="mx-auto max-w-screen-2xl px-3 sm:px-10 flex justify-center py-4">
 						<p className="text-sm text-gray-500 leading-6">
 							Copyright 2022 @
-							<span className="text-emerald-500">{site.siteTitle}</span>, All
+							<span className="text-emerald-500"><a target='black' href={site.siteUrl}>{site.siteTitle}</a></span>, All
 							rights reserved.
 						</p>
 					</div>

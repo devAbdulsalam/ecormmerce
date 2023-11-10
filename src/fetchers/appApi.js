@@ -6,7 +6,7 @@ export const appApi = createApi({
 	endpoints: (builder) => ({
 		signup: builder.mutation({
 			query: (user) => ({
-				url: '/user/signup',
+				url: '/users/signup',
 				method: 'POST',
 				body: user,
 			}),
@@ -14,13 +14,13 @@ export const appApi = createApi({
 
 		login: builder.mutation({
 			query: (user) => ({
-				url: '/user/login',
+				url: '/users/login',
 				method: 'POST',
 				body: user,
 			}),
 		}),
 		getPaymentOption: builder.query({
-			query: (id) => `/payment/get-payment-option`,
+			query: (id) => `/payments/get-payment-option`,
 		}),
 
 		// creating product
@@ -87,18 +87,18 @@ export const appApi = createApi({
 		// get orders
 		getOrder: builder.query({
 			query: (userId) => ({
-				url: '/order/get',
+				url: '/orders/get',
 				method: 'POST',
 				body: userId,
 			}),
 		}),
 		getSingleOrder: builder.query({
-			query: (id) => `/order/${id}`,
+			query: (id) => `/orders/${id}`,
 		}),
 		// create order
 		createOrder: builder.mutation({
 			query: (body) => ({
-				url: '/order/get',
+				url: '/orders/get',
 				method: 'POST',
 				body,
 			}),
@@ -106,16 +106,16 @@ export const appApi = createApi({
 		// create order
 		updateOrder: builder.mutation({
 			query: (body) => ({
-				url: '/order/create',
+				url: '/orders/create',
 				method: 'POST',
 				body,
 			}),
 		}),
-		// create order
+		// delete order
 		deleteOrder: builder.mutation({
 			query: (body) => ({
-				url: '/order/create',
-				method: 'POST',
+				url: '/orders/create',
+				method: 'DELETE',
 				body,
 			}),
 		}),
