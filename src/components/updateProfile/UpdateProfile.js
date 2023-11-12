@@ -26,7 +26,6 @@ const UpdateProfile = () => {
 		console.log(isLoading);
 		const formData = new FormData();
 		const data = {
-			image: selectedFile,
 			name: values.name,
 			address: values.address,
 			phone: values.phone,
@@ -39,10 +38,11 @@ const UpdateProfile = () => {
 			if (data.hasOwnProperty(key)) {
 				formData.append(key, data[key]);
 			}
+			formData.append('image', selectedFile);
 		}
 		axios
 			.put(
-				`${process.env.REACT_APP_BASE_API_URL}/user/update-profile`,
+				`${process.env.REACT_APP_BASE_API_URL}/users/update-profile`,
 				formData,
 				{
 					headers: {
@@ -61,6 +61,7 @@ const UpdateProfile = () => {
 			})
 			.catch((error) => {
 				console.log(error);
+				setIsLoading(false);
 				toast.error(
 					error
 						? error?.response?.error ||
@@ -69,7 +70,6 @@ const UpdateProfile = () => {
 								error?.message
 						: error?.message
 				);
-				setIsLoading(false);
 			});
 	};
 	useEffect(() => {
@@ -158,7 +158,7 @@ const UpdateProfile = () => {
 															</em>
 														</>
 													)}
-													<Field
+													<input
 														id="image"
 														name="image"
 														accept="image/jpeg, image/png, image/svg+xml"

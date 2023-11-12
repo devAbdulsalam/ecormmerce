@@ -32,7 +32,7 @@ const ChangePassword = () => {
 		console.log(data);
 		setIsLoading(true);
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/change-password`, data)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/users/change-password`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);

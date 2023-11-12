@@ -78,6 +78,8 @@ function CheckOutOrder() {
 		setIsPaypal(true);
 		// .post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, data)
 		// navigate(`/order/${id}`);
+		// https://justpaga.me/princejboy
+		// 442502 
 	};
 	if (order) {
 		return (

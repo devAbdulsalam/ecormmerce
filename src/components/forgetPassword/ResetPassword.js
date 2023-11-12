@@ -15,7 +15,7 @@ const ResetPassword = () => {
 		setIsLoading(true);
 		axios
 			.get(
-				`${process.env.REACT_APP_BASE_API_URL}/user/reset-password/${token}`,
+				`${process.env.REACT_APP_BASE_API_URL}/users/reset-password/${token}`,
 				{
 					headers: {
 						'Content-Type': 'application/json',

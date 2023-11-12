@@ -96,7 +96,7 @@ const VerifyOtp = () => {
 		setIsLoading(true);
 		const data = { otp, token, email };
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/verify-otp`, data)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/users/verify-otp`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);

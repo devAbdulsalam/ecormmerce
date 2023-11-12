@@ -18,34 +18,37 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 		email: Yup.string().email('Invalid email').required('Email is required!'),
 	});
 	const handleSubmit = async (values) => {
-		// console.log(isValidating);
+		console.log(values);
 		setIsLoading(true);
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/send-otp`, values)
-			.then((res) => res.data)
-			.then((data) => {
+			.post(`${process.env.REACT_APP_BASE_API_URL}/users/send-otp`, values)
+			.then((res) => {
+				console.log(res);
+				console.log(res.data);
 				setIsLoading(false);
-				toast.success(data.message || `otp sent successfully`);
+				toast.success(
+					res?.data?.message || `otp sent successfully ${res.data?.email}`
+				);
 				dispatch(isLoginAction(false));
 				setTimeout(() => {
-					navigate(`/verify-otp/${data?.token}/${data?.email}`);
+					navigate(`/verify-otp/${res.data?.token}/${res.data?.email}`);
 				}, 2000);
 			})
 			.catch((error) => {
+				setIsLoading(false);
+				console.log(error);
 				toast.error(
 					error
 						? error?.response?.data?.message ||
-								error?.response?.data?.error.message ||
+								error?.response?.data?.error?.message ||
 								error?.message
 						: error?.message
 				);
-				setIsLoading(false);
-				console.log(error);
 			});
 	};
 
 	return (
-		<div className="overflow-hidden bg-white mx-auto mx-auto mt-10 md:mt-20 mb-5 md:mb-10 p-4 md:p-6 w-full md:max-w-[600px] shadow-xl rounded-lg">
+		<div className="overflow-hidden bg-white mx-auto  mt-10 md:mt-20 mb-5 md:mb-10 p-4 md:p-6 w-full md:max-w-[600px] shadow-xl rounded-lg">
 			<div className="text-center mb-6">
 				<h2 className="text-3xl font-bold text-black">Forget password</h2>
 				<p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
