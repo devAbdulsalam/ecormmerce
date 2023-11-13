@@ -11,8 +11,7 @@ function SliceCategory() {
 	let navigate = useNavigate();
 	const dispatch = useDispatch();
 	const handleClick = (value) => {
-		navigate('/search?Category=' + value);
-
+		navigate('/search?category=' + value);
 		dispatch(searchAction({ value: value, path: 'Category' }));
 	};
 	return (

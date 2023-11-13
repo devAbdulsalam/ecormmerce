@@ -30,7 +30,7 @@ const UpdatePassword = () => {
 		};
 		setIsLoading(true);
 		axios
-			.put(`${process.env.REACT_APP_BASE_API_URL}/user/update-profile`, data)
+			.put(`${process.env.REACT_APP_BASE_API_URL}/users/update-profile`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);

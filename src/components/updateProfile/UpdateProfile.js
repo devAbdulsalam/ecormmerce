@@ -23,41 +23,35 @@ const UpdateProfile = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const handleSubmit = async (values) => {
 		setIsLoading(true);
-		console.log(isLoading);
+		// console.log(selectedFile);
 		const formData = new FormData();
 		const data = {
 			name: values.name,
 			address: values.address,
 			phone: values.phone,
 			email: values.email,
-			token: user?.token,
-			id: user?.user?._id,
 		};
 
 		for (const key in data) {
-			if (data.hasOwnProperty(key)) {
-				formData.append(key, data[key]);
-			}
-			formData.append('image', selectedFile);
+			formData.append(key, data[key]);
 		}
+		formData.append('image', selectedFile);
 		axios
-			.put(
+			.patch(
 				`${process.env.REACT_APP_BASE_API_URL}/users/update-profile`,
 				formData,
 				{
 					headers: {
-						'Content-Type': 'multipart/form-data',
 						Authorization: `Bearer ${user?.token}`,
+						'Content-Type': 'multipart/form-data',
 					},
 				}
 			)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				// toast.success(data.message);
-				console.log(data);
 				toast.success('Profile updated successfully');
-				dispatch(login(data));
+				dispatch(login({ ...data, token: user?.token }));
 			})
 			.catch((error) => {
 				console.log(error);
@@ -66,7 +60,7 @@ const UpdateProfile = () => {
 					error
 						? error?.response?.error ||
 								error?.response?.data?.message ||
-								error?.response?.data?.error.message ||
+								error?.response?.data?.error?.message ||
 								error?.message
 						: error?.message
 				);

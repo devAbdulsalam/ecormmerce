@@ -40,8 +40,9 @@ export const CartSlice = createSlice({
 			});
 		},
 		emptyCart(state, action) {
-			localStorage.removeItem('cartItems');
-			return (state = []);
+			state.cartItems = [];
+			localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+			return state;
 		},
 		decreaseCart(state, action) {
 			const itemIndex = state.cartItems.findIndex(
