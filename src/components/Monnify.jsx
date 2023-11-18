@@ -8,10 +8,11 @@ import {
 
 import axios from 'axios';
 const Monnify = ({ data }) => {
+	const apiUrl = process.env.REACT_APP_BASE_API_URL;
 	const apiKey = process.env.REACT_APP_MONNIFY_API_KEY;
 	const contractCode = process.env.REACT_APP_MONNIFY_CONTRACT_CODE;
+	console.log(contractCode);
 	const [isLoading, setIsLoading] = useState(false);
-	const apiUrl = process.env.REACT_APP_BASE_API_URL;
 	const paidWithMonnify = async () => {
 		setIsLoading(true);
 		try {

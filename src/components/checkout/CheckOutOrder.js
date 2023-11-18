@@ -33,7 +33,7 @@ function CheckOutOrder() {
 		if (orders) {
 			const singleOrder = orders.find((order) => order._id === id);
 			if (singleOrder) {
-				// console.log(singleOrder);
+				console.log(singleOrder);
 				return setOrder(singleOrder);
 			}
 		}
@@ -51,36 +51,36 @@ function CheckOutOrder() {
 		toast.error(error?.error?.message || error.error);
 		dispatch(loadingAction(false));
 	}
-	const handleSubmit = (value) => {
-		// console.log(value);
-		if (!cartTotalAmount > 50) {
-			return toast.error('Order Items must worth more than $100');
-		}
+	// const handleSubmit = (value) => {
+	// 	console.log(value);
+	// 	if (!cartTotalAmount > 50) {
+	// 		return toast.error('Order Items must worth more than $100');
+	// 	}
 
-		if (value.shippingOption === 'fedx') {
-			setShippingPrice(50);
-		} else {
-			setShippingPrice(60);
-		}
-		const data = {
-			userId,
-			id,
-			invoice: id,
-			cart: item.cartItems,
-			shippingPrice,
-			...value,
-			cartTotalAmount,
-			totalPrice: Number(cartTotalAmount + shippingPrice),
-			createdDate: new Date(),
-			updatedDate: new Date(),
-		};
-		setOrder(data);
-		// setIsPaypal(true);
-		// .post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, data)
+	// 	if (value.shippingOption === 'fedx') {
+	// 		setShippingPrice(50);
+	// 	} else {
+	// 		setShippingPrice(60);
+	// 	}
+	// 	const data = {
+	// 		userId,
+	// 		id,
+	// 		invoice: id,
+	// 		cart: item.cartItems,
+	// 		shippingPrice,
+	// 		...value,
+	// 		cartTotalAmount,
+	// 		totalPrice: Number(cartTotalAmount + shippingPrice),
+	// 		createdDate: new Date(),
+	// 		updatedDate: new Date(),
+	// 	};
+	// 	setOrder(data);
+	// 	// setIsPaypal(true);
+	// 	// .post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, data)
 
-		// https://justpaga.me/princejboy
-		// 442502
-	};
+	// 	// https://justpaga.me/princejboy
+	// 	// 442502
+	// };
 	if (order) {
 		return (
 			<div className="bg-gray-50">
@@ -240,7 +240,7 @@ function CheckOutOrder() {
 									</div>
 									<div
 										className="col-span-6 sm:col-span-3 cursor-pointer"
-										onClick={handleSubmit}
+										// onClick={(order) => handleSubmit(order)}
 									>
 										<Monnify data={order} />
 										{/* <button
