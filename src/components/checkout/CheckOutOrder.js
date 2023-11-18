@@ -3,12 +3,10 @@ import CheckOutSummary from '../orderSummary/CheckOutSummary';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-// import Payment from '../payment/Payment';
-// import Paypal from '../payment/Paypal';
-// import { useGetPaymentOptionQuery } from '../../fetchers/appApi';
 import { loadingAction } from '../../store/reducers/loadingSlice';
 import { useGetOrderQuery } from '../../fetchers/appApi';
-import Monnify from '../Monnify';
+// import Monnify from '../Monnify';
+import FlutterWave from '../FlutterWave';
 function CheckOutOrder() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
@@ -212,7 +210,8 @@ function CheckOutOrder() {
 									className="col-span-6 sm:col-span-3 cursor-pointer"
 									// onClick={(order) => handleSubmit(order)}
 								>
-									<Monnify data={order} />
+									{/* <Monnify data={order} /> */}
+									<FlutterWave data={order} />
 									{/* <button
 											type="submit"
 											disabled={isLoading}
