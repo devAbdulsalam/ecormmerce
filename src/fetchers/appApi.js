@@ -86,10 +86,11 @@ export const appApi = createApi({
 		}),
 		// get orders
 		getOrder: builder.query({
-			query: (userId) => ({
+			query: (prop) => ({
 				url: '/orders/get',
+				body: { userId: prop.userId },
 				method: 'POST',
-				body: userId,
+				Authorization: `Bearer ${prop.token}`,
 			}),
 		}),
 		getSingleOrder: builder.query({

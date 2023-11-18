@@ -3,12 +3,12 @@ import CheckOutSummary from '../orderSummary/CheckOutSummary';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
-import Payment from '../payment/Payment';
-import Paypal from '../payment/Paypal';
+// import Payment from '../payment/Payment';
+// import Paypal from '../payment/Paypal';
 // import { useGetPaymentOptionQuery } from '../../fetchers/appApi';
 import { loadingAction } from '../../store/reducers/loadingSlice';
 import { useGetOrderQuery } from '../../fetchers/appApi';
-
+import Monnify from '../Monnify';
 function CheckOutOrder() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
@@ -19,9 +19,9 @@ function CheckOutOrder() {
 	const orders = useSelector((state) => state.orders);
 	const userId = user?.user?._id;
 	const [shippingPrice, setShippingPrice] = useState('50');
-	let [isPayment, setIsPayment] = useState(false);
-	let [paymentMethod, setPaymentMethod] = useState(false);
-	let [isPaypal, setIsPaypal] = useState(false);
+	// let [isPayment, setIsPayment] = useState(false);
+	// let [paymentMethod, setPaymentMethod] = useState(false);
+	// let [isPaypal, setIsPaypal] = useState(false);
 	let [order, setOrder] = useState('');
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -33,7 +33,7 @@ function CheckOutOrder() {
 		if (orders) {
 			const singleOrder = orders.find((order) => order._id === id);
 			if (singleOrder) {
-				console.log(singleOrder);
+				// console.log(singleOrder);
 				return setOrder(singleOrder);
 			}
 		}
@@ -52,7 +52,7 @@ function CheckOutOrder() {
 		dispatch(loadingAction(false));
 	}
 	const handleSubmit = (value) => {
-		console.log(value);
+		// console.log(value);
 		if (!cartTotalAmount > 50) {
 			return toast.error('Order Items must worth more than $100');
 		}
@@ -75,11 +75,11 @@ function CheckOutOrder() {
 			updatedDate: new Date(),
 		};
 		setOrder(data);
-		setIsPaypal(true);
+		// setIsPaypal(true);
 		// .post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, data)
-		// navigate(`/order/${id}`);
+
 		// https://justpaga.me/princejboy
-		// 442502 
+		// 442502
 	};
 	if (order) {
 		return (
@@ -238,8 +238,12 @@ function CheckOutOrder() {
 											Continue Shopping
 										</Link>
 									</div>
-									<div className="col-span-6 sm:col-span-3">
-										<button
+									<div
+										className="col-span-6 sm:col-span-3 cursor-pointer"
+										onClick={handleSubmit}
+									>
+										<Monnify data={order} />
+										{/* <button
 											type="submit"
 											disabled={isLoading}
 											onClick={handleSubmit}
@@ -266,7 +270,7 @@ function CheckOutOrder() {
 													></path>
 												</svg>
 											</span>
-										</button>
+										</button> */}
 									</div>
 								</div>
 							</div>
@@ -274,14 +278,15 @@ function CheckOutOrder() {
 						<CheckOutSummary order={order} />
 					</div>
 				</div>
-				<Paypal order={order} isOpen={isPaypal} />
+
+				{/* <Paypal order={order} isOpen={isPaypal} />
 				<Payment
 					isOpen={isPayment}
 					setIsPayment={setIsPayment}
 					setPaymentMethod={setPaymentMethod}
 					setIsPaypal={setIsPaypal}
 					order={order}
-				/>
+				/> */}
 			</div>
 		);
 	}

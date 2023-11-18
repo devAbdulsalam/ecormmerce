@@ -18,14 +18,17 @@ function Order() {
 	let [data, setData] = useState('');
 	const orders = useSelector((state) => state.orders);
 	useEffect(() => {
-		const singleOrder = orders.find((order) => order._id === id);
-		if (singleOrder) {
-			return setData(singleOrder);
-		} else {
-			toast.error('Invalid order');
-			setTimeout(() => {
-				navigate(-1);
-			}, 3000);
+		console.log(orders);
+		if (orders?.length > 0) {
+			const singleOrder = orders.find((order) => order._id === id);
+			if (singleOrder) {
+				return setData(singleOrder);
+			} else {
+				toast.error('Invalid order');
+				setTimeout(() => {
+					navigate(-1);
+				}, 3000);
+			}
 		}
 	}, [id, orders, navigate]);
 

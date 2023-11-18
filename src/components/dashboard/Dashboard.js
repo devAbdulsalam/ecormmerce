@@ -12,13 +12,12 @@ const Dashboard = () => {
 	const [completedOrder, setCompletedOrder] = useState([]);
 	const dispatch = useDispatch();
 	const order = useSelector((state) => state.orders);
-	const userId = user?.user?._id;
+	const prop = { userId: user?.user?._id, token: user.token };
+	// console.log(prop)
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
-	const { data, isError, isLoading, error } = useGetOrderQuery({
-		userId,
-	});
+	const { data, isError, isLoading, error } = useGetOrderQuery(prop);
 	if (isLoading) {
 		dispatch(loadingAction(true));
 	}
@@ -30,14 +29,16 @@ const Dashboard = () => {
 		dispatch(loadingAction(false));
 	}
 	useEffect(() => {
-		setRecentOrder(order);
-		setPendingOrder(order?.filter(({ isPaid }) => !isPaid));
-		setProcessingOrder(
-			order?.filter(({ isDelivered }) => isDelivered === 'processing')
-		);
-		setCompletedOrder(
-			order?.filter(({ isDelivered }) => isDelivered === 'delivered')
-		);
+		if (order?.length > 0) {
+			setRecentOrder(order);
+			setPendingOrder(order?.filter(({ isPaid }) => !isPaid));
+			setProcessingOrder(
+				order?.filter(({ isDelivered }) => isDelivered === 'processing')
+			);
+			setCompletedOrder(
+				order?.filter(({ isDelivered }) => isDelivered === 'delivered')
+			);
+		}
 	}, [order]);
 	return (
 		<div className="overlow-hidden">

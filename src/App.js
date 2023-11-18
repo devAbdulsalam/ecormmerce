@@ -39,11 +39,11 @@ function App() {
 	let [site, setSite] = useState('');
 	useUserFromLocalStorage();
 	useEffect(() => {
-		getProducts()
+		getProducts();
 		axios
 			.get('general')
 			.then((res) => {
-				setSite(res.data)
+				setSite(res.data);
 			})
 			.catch((error) => console.log(error));
 	}, []);
