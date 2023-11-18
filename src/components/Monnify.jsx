@@ -51,18 +51,16 @@ const Monnify = ({ data }) => {
 	const paymentData = {
 		amount: data?.totalPrice + 6000,
 		currency: 'NGN',
-		reference: `${data?._id} + '' + ${Math.floor(
-			Math.random() * 1000000000 + 1
-		)}`,
-		customerFullName: `${data?.firsName} " " ${data?.lastName}`,
+		reference: `${data?._id} ${Math.floor(Math.random() * 1000000000 + 1)}`,
+		customerFullName: `${data?.firstName} ${data?.lastName}`,
 		customerEmail: data?.email,
 		customerMobileNumber: data?.phone,
 		apiKey,
 		contractCode,
-		paymentDescription: 'Test Pay',
+		paymentDescription: `Test Payment for ${data?.firstName} orders`,
 		isTestMode: true,
 		metadata: {
-			name: 'Damilare',
+			name: `${data?.firsName} ${data?.lastName}`,
 			age: 45,
 		},
 	};
