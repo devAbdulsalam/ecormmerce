@@ -7,7 +7,7 @@ function CheckOutSummary({ order }) {
 			<div className="border p-5 lg:px-8 lg:py-8 rounded-lg bg-white order-1 sm:order-2">
 				<h2 className="font-semibold text-black text-lg pb-4">Order Summary</h2>
 				<div className="overflow-y-scroll flex-grow w-full max-h-64 bg-gray-50 block ">
-					{order.cart.map((cartItem, index) => {
+					{order?.cart?.map((cartItem, index) => {
 						return (
 							<div
 								key={index}
