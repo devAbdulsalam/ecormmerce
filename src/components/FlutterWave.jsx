@@ -36,7 +36,7 @@ const FlutterWave = ({ data }) => {
 
 	const close = () => {
 		// console.log(response);
-		toast.success('Payment Cancle');
+		toast.success('Payment Cancel');
 	};
 	return (
 		<>
