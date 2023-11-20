@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
-
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { loadingAction } from '../../store/reducers/loadingSlice';
+import { loadingAction } from '../store/reducers/loadingSlice';
 
 const FlutterWave = ({ data }) => {
 	const apiUrl = process.env.REACT_APP_BASE_API_URL;
